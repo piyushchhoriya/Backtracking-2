@@ -105,3 +105,142 @@ class Solution {
         }
     }
 }
+
+
+// Generate All Subsets (Backtracking)
+import java.util.*;
+
+class Solution {
+    List<List<Integer>> result;
+
+    public List<List<Integer>> subsets(int[] nums) {
+        result = new ArrayList<>();
+        recurse(nums, 0, new ArrayList<>());
+        return result;
+    }
+
+    private void recurse(int[] nums, int index, List<Integer> path) {
+        if (index == nums.length) {
+            result.add(new ArrayList<>(path));
+            return;
+        }
+        // Exclude the current element
+        recurse(nums, index + 1, path);
+        // Include the current element
+        path.add(nums[index]);
+        recurse(nums, index + 1, path);
+        path.remove(path.size() - 1);
+    }
+}
+
+
+2. Generate All Subsequences (Backtracking)
+import java.util.*;
+
+class Solution {
+    List<List<Integer>> result;
+
+    public List<List<Integer>> subsequences(int[] nums) {
+        result = new ArrayList<>();
+        recurse(nums, 0, new ArrayList<>());
+        return result;
+    }
+
+    private void recurse(int[] nums, int index, List<Integer> path) {
+        if (index == nums.length) {
+            if (!path.isEmpty()) { // Subsequence must not be empty
+                result.add(new ArrayList<>(path));
+            }
+            return;
+        }
+        // Include current element
+        path.add(nums[index]);
+        recurse(nums, index + 1, path);
+        path.remove(path.size() - 1);
+
+        // Exclude current element
+        recurse(nums, index + 1, path);
+    }
+}
+
+3. Subsets Without Duplicates
+import java.util.*;
+
+class Solution {
+    List<List<Integer>> result;
+
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        result = new ArrayList<>();
+        Arrays.sort(nums); // Sort first
+        recurse(nums, 0, new ArrayList<>());
+        return result;
+    }
+
+    private void recurse(int[] nums, int index, List<Integer> path) {
+        result.add(new ArrayList<>(path));
+
+        for (int i = index; i < nums.length; i++) {
+            if (i > index && nums[i] == nums[i - 1]) continue; // Skip duplicate elements
+
+            path.add(nums[i]);
+            recurse(nums, i + 1, path);
+            path.remove(path.size() - 1);
+        }
+    }
+}
+
+4. Subsequences Without Duplicates (Sorting + Skipping Duplicates)
+import java.util.*;
+
+class Solution {
+    Set<List<Integer>> result; // Using Set to store unique subsequences
+
+    public List<List<Integer>> subsequencesWithoutDuplicates(int[] nums) {
+        result = new HashSet<>();
+        Arrays.sort(nums); // Sort first
+        recurse(nums, 0, new ArrayList<>());
+        return new ArrayList<>(result);
+    }
+
+    private void recurse(int[] nums, int index, List<Integer> path) {
+        if (!path.isEmpty()) { // Non-empty subsequence
+            result.add(new ArrayList<>(path));
+        }
+        for (int i = index; i < nums.length; i++) {
+            if (i > index && nums[i] == nums[i - 1]) continue; // Skip duplicates
+
+            path.add(nums[i]);
+            recurse(nums, i + 1, path);
+            path.remove(path.size() - 1);
+        }
+    }
+}
+
+5. Unique Subsequences Using HashSet
+import java.util.*;
+
+class Solution {
+    Set<List<Integer>> result; // HashSet ensures unique subsequences
+
+    public List<List<Integer>> subsequencesUnique(int[] nums) {
+        result = new HashSet<>();
+        recurse(nums, 0, new ArrayList<>());
+        return new ArrayList<>(result);
+    }
+
+    private void recurse(int[] nums, int index, List<Integer> path) {
+        if (index == nums.length) {
+            if (!path.isEmpty()) { // Non-empty subsequence
+                result.add(new ArrayList<>(path));
+            }
+            return;
+        }
+        // Include current element
+        path.add(nums[index]);
+        recurse(nums, index + 1, path);
+        path.remove(path.size() - 1);
+
+        // Exclude current element
+        recurse(nums, index + 1, path);
+    }
+}
